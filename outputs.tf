@@ -9,3 +9,12 @@ output "asg_name" {
 output "ami_used" {
   value = data.aws_ami.latest_nginx_ami.id
 }
+
+output "alb_dns_name" {
+  value = aws_lb.web_alb.dns_name
+}
+
+output "alb_arn" {
+  value = aws_lb.web_alb.arn
+}
+

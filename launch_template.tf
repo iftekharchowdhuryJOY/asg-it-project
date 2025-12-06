@@ -8,14 +8,17 @@ resource "aws_launch_template" "web_lt" {
     security_groups             = [aws_security_group.web_sg.id]
   }
 
-  user_data = base64encode(<<-EOF
-    #!/bin/bash
-    yum update -y
-    amazon-linux-extras install nginx1 -y
-    systemctl enable nginx
-    systemctl start nginx
-  EOF
-  )
+user_data = base64encode(<<-EOF
+  #!/bin/bash
+  yum update -y
+  amazon-linux-extras install nginx1 -y
+  systemctl enable nginx
+  INSTANCE_ID=$(curl http://169.254.169.254/latest/meta-data/instance-id)
+  echo "<h1>Hello from $INSTANCE_ID</h1>" > /usr/share/nginx/html/index.html
+  systemctl start nginx
+EOF
+)
+
 
   tag_specifications {
     resource_type = "instance"
